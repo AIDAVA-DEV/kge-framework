@@ -10,7 +10,7 @@ import  torch_geometric
 from    torch_geometric.nn import GAE, RGCNConv
 from    torch_geometric.utils import negative_sampling
 
-from    utils import eval_hits
+from    .utils import eval_hits
 
 class RGCNEncoder(torch.nn.Module):
     def __init__(self, num_nodes, hidden_channels, num_relations):
