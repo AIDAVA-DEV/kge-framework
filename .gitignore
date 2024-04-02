@@ -81,3 +81,8 @@ $RECYCLE.BIN/
 src/__pycache__/utils.cpython-39.pyc
 src/__pycache__/gnn.cpython-39.pyc
 src/__pycache__/__init__.cpython-39.pyc
+src/__pycache__/gcn.cpython-39.pyc
+src/__pycache__/loaders.cpython-39.pyc
+src/__pycache__/models.cpython-39.pyc
+src/__pycache__/TransE.cpython-39.pyc
+workflows/Reasoner.ipynb
