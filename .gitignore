@@ -3,6 +3,8 @@
 __init__.py
 data/oaei
 models/
+
+
 ### Linux ###
 *~
 
@@ -86,3 +88,4 @@ src/__pycache__/loaders.cpython-39.pyc
 src/__pycache__/models.cpython-39.pyc
 src/__pycache__/TransE.cpython-39.pyc
 workflows/Reasoner.ipynb
+src/__pycache__/rgnn.cpython-39.pyc
