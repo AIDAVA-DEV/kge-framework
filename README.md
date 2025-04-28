@@ -8,7 +8,7 @@ AIDAVA WP5 Knowledge Graph Embedding source code and workflows. The aim is to id
 
 ### KG Embedding
 
-
+Knowledge graph embedding is an approach to represent entities and relationships in a knowledge graph as low dimensional vectors, also known as embeddings. This technique allows practitioners to leverage the structural information present in knowledge graphs for a range of applications ranging from link prediction and node classification to relation extraction, categorized as completion task.
 
 ### KG Alignment
 
@@ -17,7 +17,7 @@ In order to disambiguate and contextualize knowledge with unified representation
 ![System Image](images/icd2sn_resolution.png)
 
 
-### AI Model Development
+## AI Model Development
 
 In order to extract and apply enriched data for model training in downstream tasks, e.g. diagnosis code prediction, the contextual data must be void of ambiguity. The above operations are done manually or semi-automatically by clinical data stewards, the final PHKG is often incomplete because certain facts are unknown or due to error at multiple possible points in the process. Important context related to a patient’s conditions therefore can be missing in the PHKG that will have a negative effect on decision making. Particularly for the critical care use of AI models, the reliance on data that is well curated plays an important role. To showcase the framework's practical utility, we apply the learned representations to a diagnosis task targeting patients with heart failure conditions. The performance is evaluated using precision, recall, and f1 score, to quantify how much knowledge completion and ontology alignment contribute to data-driven predictive accuracy in critical care settings.
 

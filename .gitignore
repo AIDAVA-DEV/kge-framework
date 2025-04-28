@@ -1,10 +1,15 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,linux,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,linux,windows
 __init__.py
-data/oaei
+
 models/
 archive/
 img/
+
+data/img
+data/m2skg
+data/oaei
+
 ### Linux ###
 *~
 
