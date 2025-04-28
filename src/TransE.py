@@ -2,7 +2,7 @@ from    src.models  import BaseModel as bm
 from    torch   import nn
 import  torch
 
-from    src.loaders import TestDataset, TrainDataset
+from    src.archive.loaders import TestDataset, TrainDataset
 from    torch.utils.data import DataLoader
 
 import  numpy as np
