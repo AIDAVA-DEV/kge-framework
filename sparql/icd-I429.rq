@@ -1,0 +1,9 @@
+PREFIX ehrtk: <https://biomedit.ch/rdf/EHR-Toolkit#>
+PREFIX icd10: <https://biomedit.ch/rdf/EHR-Toolkit/icd10#>
+PREFIX patient: <https://biomedit.ch/rdf/EHR-Toolkit/Patient/>
+ASK WHERE 
+{ 
+    VALUES ?patient { patient:10136820 }
+    VALUES ?code { icd10:I429 }
+    ?patient ehrtk:has_diagnosis ?code . 
+} LIMIT 1
