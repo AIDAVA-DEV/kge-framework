@@ -1,26 +1,25 @@
-from   models  import BaseModel
-from    torch   import nn
+from    models  import BaseModel
+
 import  torch
-
-
 import  numpy as np
 
-class TransE(BaseModel):
-    def __init__(self, num_entities, num_relations, device, emb_dim=30, lr=1e-3):
-        super(TransE, self).__init__(num_entities, num_relations, emb_dim, device, lr)
+class TorusE(BaseModel):
+    def __init__(self, num_entities, num_relations, device, emb_dim=20, lr=1e-3):
+        super(TorusE, self).__init__(num_entities, num_relations, emb_dim, device, lr)
         self.emb_dim = emb_dim
-    
-    def forward(self, pos_h, pos_r, pos_t):
-        # Add normalization for TransE
-        self.entity_embds.data[:-1, :].div_(self.entity_embds.data[:-1, :].norm(p=2, dim=1, keepdim=True))
-        h_embs = torch.index_select(self.entity_embds, 0, pos_h)
-        t_embs = torch.index_select(self.entity_embds, 0, pos_t)
-        r_embs = torch.index_select(self.rel_embds, 0, pos_r)
-        return h_embs, r_embs, t_embs
     
     def predict(self, batch_h, batch_r, batch_t, batch_size, num_samples):
         h_embeds, r_embeds, t_embeds = self.forward(batch_h, batch_r, batch_t)
-        scores = torch.norm(h_embeds + r_embeds - t_embeds, p=1, dim=1).view(batch_size, num_samples).detach().cpu()
+        
+        h_embeds = torch.sigmoid(h_embeds)
+        r_embeds = torch.sigmoid(r_embeds)
+        t_embeds = torch.sigmoid(t_embeds)
+        
+        diff = h_embeds + r_embeds - t_embeds
+        dist = torch.min(torch.abs(diff), 1 - torch.abs(diff))
+        
+        scores = torch.sum(dist, dim=1)
+        scores = scores.view(batch_size, num_samples).detach().cpu()
         return scores
     
     def compute_loss(self, batch):
@@ -31,24 +30,36 @@ class TransE(BaseModel):
         neg_r = batch[4].to(self.device)
         neg_t = batch[5].to(self.device)
         
-        return self.TransE_loss(pos_h, pos_r, pos_t, neg_h, neg_r, neg_t)
+        return self.TorusE_loss(pos_h, pos_r, pos_t, neg_h, neg_r, neg_t)
     
-    def TransE_loss(self, pos_h, pos_r, pos_t, neg_h, neg_r, neg_t):
+    def TorusE_loss(self, pos_h, pos_r, pos_t, neg_h, neg_r, neg_t):
         pos_h_embs, pos_r_embs, pos_t_embs = self.forward(pos_h, pos_r, pos_t)
         neg_h_embs, neg_r_embs, neg_t_embs = self.forward(neg_h, neg_r, neg_t)
         
-        d_pos = torch.norm(pos_h_embs + pos_r_embs - pos_t_embs, p=1, dim=1)
-        d_neg = torch.norm(neg_h_embs + neg_r_embs - neg_t_embs, p=1, dim=1)
-        ones = torch.ones(d_pos.size(0)).to(self.device)
+        pos_h_embs = torch.sigmoid(pos_h_embs)
+        pos_r_embs = torch.sigmoid(pos_r_embs)
+        pos_t_embs = torch.sigmoid(pos_t_embs)
+        neg_h_embs = torch.sigmoid(neg_h_embs)
+        neg_r_embs = torch.sigmoid(neg_r_embs)
+        neg_t_embs = torch.sigmoid(neg_t_embs)
         
+        pos_diff = pos_h_embs + pos_r_embs - pos_t_embs
+        pos_dist = torch.min(torch.abs(pos_diff), 1 - torch.abs(pos_diff))
+        d_pos = torch.sum(pos_dist, dim=1)
+        
+        neg_diff = neg_h_embs + neg_r_embs - neg_t_embs
+        neg_dist = torch.min(torch.abs(neg_diff), 1 - torch.abs(neg_diff))
+        d_neg = torch.sum(neg_dist, dim=1)
+        
+        ones = torch.ones(d_pos.size(0)).to(self.device)
         margin_loss = torch.nn.MarginRankingLoss(margin=1.)
         loss = margin_loss(d_neg, d_pos, ones)
         
         return loss
-    
-    
+
 
 if __name__ == "__main__":
+
     # Small example parameters
     num_entities = 10
     num_relations = 5
@@ -76,12 +87,12 @@ if __name__ == "__main__":
     ]
     
     # Initialize model
-    model = TransE(num_entities, num_relations, device, emb_dim=emb_dim, lr=lr)
+    model = TorusE(num_entities, num_relations, device, emb_dim=emb_dim, lr=lr)
     
     # Train the model
-    print("Training TransE model...")
+    print("Training TorusE model...")
     train_losses = model._train(train_triples, train_batch_size=train_batch_size, num_epochs=num_epochs)
     
     # Evaluate the model
-    print("\nEvaluating TransE model...")
+    print("\nEvaluating TorusE model...")
     model._eval(eval_triples)
