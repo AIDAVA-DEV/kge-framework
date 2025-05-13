@@ -1,4 +1,4 @@
-from   models  import BaseModel
+from   .models  import BaseModel
 from    torch   import nn
 import  torch
 
