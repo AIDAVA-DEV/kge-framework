@@ -157,6 +157,7 @@ class BaseModel(nn.Module):
         self.optimizer = torch.optim.Adam(params, lr=lr)
     
     def forward(self, pos_h, pos_r, pos_t):
+
         h_embs = torch.index_select(self.entity_embds, 0, pos_h)
         t_embs = torch.index_select(self.entity_embds, 0, pos_t)
         r_embs = torch.index_select(self.rel_embds, 0, pos_r)
