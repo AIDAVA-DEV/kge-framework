@@ -4,6 +4,6 @@ PREFIX patient: <https://biomedit.ch/rdf/EHR-Toolkit/Patient/>
 ASK WHERE 
 { 
     VALUES ?patient { patient:10136820 }
-    VALUES ?code { icd10:I429 }
+    VALUES ?code { icd10:I429 icd10:I429B  }
     ?patient ehrtk:has_diagnosis ?code . 
 } LIMIT 1
