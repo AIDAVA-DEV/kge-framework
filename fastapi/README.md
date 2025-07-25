@@ -7,20 +7,18 @@ This README provides instructions for building and running the Docker container 
 - **Project Files**: Ensure the following files are in the `impute-code` directory:
   - `Dockerfile`
   - `main.py`
+  - `TorusE.py`
 
 
 
 ## Building the Docker Image
 
-1. Open a terminal and navigate to the project directory:
-   ```bash
-   cd impute-code
-   ```
-2. Build the Docker image:
+
+1. Build the Docker image:
    ```bash
    docker build -t impute-code .
    ```
-3. Verify the image:
+2. Verify the image:
    ```bash
    docker images
    ```
@@ -38,6 +36,11 @@ This README provides instructions for building and running the Docker container 
 3. Check logs:
    ```bash
    docker logs impute-container
+   ```
+
+4. Open browser and go to link to try the api:
+   ```bash
+   http://localhost:8000/docs
    ```
 
 ## Stopping and Cleaning Up
