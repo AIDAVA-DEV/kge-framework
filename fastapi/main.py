@@ -5,7 +5,7 @@ import rdflib
 from rdflib import Graph
 import torch
 import numpy as np
-from src.TorusE import TorusE
+from TorusE import TorusE
 import os
 
 app = FastAPI(title="impute-code")
